@@ -1,0 +1,87 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DOCDIR=$(CURDIR)/debian/libgoogle-glog-doc/
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+BUILDDIR = obj-$(DEB_HOST_MULTIARCH)
+
+CONFIGURE_ARGS= \
+ -DCMAKE_BUILD_TYPE=Release \
+ -DLIB_INSTALL_DIR:STRING="lib/$(DEB_HOST_MULTIARCH)"
+
+override_dh_auto_configure-arch:
+	# statically linked
+	dh_auto_configure -B $(BUILDDIR)-static \
+		-- $(CONFIGURE_ARGS) \
+		-DBUILD_SHARED_LIBS=OFF \
+		-DBUILD_TESTING=OFF
+
+	# dynamically linked
+	dh_auto_configure -B $(BUILDDIR) \
+		-- $(CONFIGURE_ARGS) \
+		-DBUILD_SHARED_LIBS=ON \
+		-DBUILD_TESTING=ON
+
+override_dh_auto_configure-indep:
+	# not needed
+
+override_dh_auto_build-arch:
+	# statically linked
+	dh_auto_build -a -B $(BUILDDIR)-static
+	# dynamically linked
+	dh_auto_build -a -B $(BUILDDIR)
+
+override_dh_auto_build-indep:
+	# not needed
+
+
+override_dh_auto_install-arch:
+	dh_auto_install -a -O--buildsystem=cmake -B $(BUILDDIR)-static
+	dh_auto_install -a -O--buildsystem=cmake -B $(BUILDDIR)
+	# put the static libs together with the rest of the stuff
+	cp -v $(BUILDDIR)-static/*.a debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+	-$(RM) -r $(BUILDDIR)-static
+	find $(CURDIR)/debian/tmp/ -type d -name .cmake | xargs -r rm -rfv
+
+override_dh_auto_install-indep:
+	# not needed
+
+override_dh_install-arch:
+	dh_install -a -O--buildsystem=cmake
+	# only for real 0.5.0
+#ifneq (,$(findstring $(DEB_HOST_ARCH),amd64 i386))
+#	dh_install -plibgoogle-glog-dev debian/tmp/usr/share/glog usr/share/
+#endif
+
+override_dh_install-indep:
+	# not needed
+
+override_dh_auto_test-arch:
+	-if [ -f /proc/version ]; then $(MAKE) check; fi
+
+override_dh_auto_test-indep:
+	# not needed
+
+override_dh_installdocs-indep:
+	dh_installdocs
+	sed -i 's|http.*/favicon.ico||' \
+		$(DOCDIR)/usr/share/doc/libgoogle-glog-dev/glog.html
+
+override_dh_compress:
+	dh_compress -X.rst
+
+%:
+	dh  $@ --buildsystem=cmake
+
+get-orig-source:
+	uscan --verbose --force-download --rename
+
+.PHONY: override_dh_auto_configure-arch override_dh_auto_configure-indep \
+	override_dh_auto_build-arch override_dh_auto_build-indep \
+	override_dh_auto_install-arch override_dh_auto_install-indep \
+	override_dh_install-arch override_dh_install-indep \
+	override_dh_auto_test-arch override_dh_auto_test-indep \
+	override_dh_installdocs-indep override_dh_compress

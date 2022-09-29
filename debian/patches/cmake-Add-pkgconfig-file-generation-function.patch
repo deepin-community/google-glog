@@ -1,0 +1,35 @@
+From 54d91e377727b78f481a463e0fa3dd4e395b62b1 Mon Sep 17 00:00:00 2001
+From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Date: Tue, 19 Jan 2021 10:15:41 +0900
+Subject: [PATCH] cmake: Add pkgconfig file generation function
+
+When using CMake, the pkg-config file is not generated.
+This adds a function to generate files in pkg-config.
+
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
+ CMakeLists.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 808330e..6f2abd1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -682,3 +682,14 @@ install (FILES
+ 
+ install (EXPORT glog-targets NAMESPACE glog:: DESTINATION
+   ${_glog_CMake_INSTALLDIR})
++
++# pkg-config
++set(VERSION		"${PROJECT_VERSION}")
++set(prefix		"${CMAKE_INSTALL_PREFIX}")
++set(exec_prefix	"\${prefix}")
++set(includedir		"\${prefix}/include")
++set(libdir		"\${prefix}/${LIB_INSTALL_DIR}")
++configure_file(libglog.pc.in libglog.pc @ONLY)
++
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libglog.pc
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+-- 
+2.30.0.rc2
+
