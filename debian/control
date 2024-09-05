@@ -10,7 +10,7 @@ Homepage: https://github.com/google/glog
 Package: libgoogle-glog-dev
 Section: libdevel
 Architecture: any
-Depends: libgoogle-glog0v6t64 (= ${binary:Version}), libgflags-dev, libunwind-dev [i386 amd64] | libunwind7-dev [i386 amd64], ${misc:Depends}
+Depends: libgoogle-glog0v6 (= ${binary:Version}), libgflags-dev, libunwind-dev [i386 amd64] | libunwind7-dev [i386 amd64], ${misc:Depends}
 Description: library that implements application-level logging.
  This library provides logging APIs based on C++-style streams and
  various helper macros.
@@ -18,8 +18,7 @@ Description: library that implements application-level logging.
  This package contains static and debug libraries and header files for
  developing applications.
 
-Package: libgoogle-glog0v6t64
-Provides: ${t64:Provides}
+Package: libgoogle-glog0v6
 Breaks: libgoogle-glog0v6 (<< ${source:Version})
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
