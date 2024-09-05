@@ -1,0 +1,29 @@
+--- a/CMakeLists.txt.original	2023-02-16 16:14:41.891485974 -0800
++++ b/CMakeLists.txt	2023-02-16 16:15:57.970855143 -0800
+@@ -1034,24 +1034,14 @@
+ 
+ get_filename_component (_PREFIX "${CMAKE_INSTALL_PREFIX}" ABSOLUTE)
+ 
+-# Directory containing the find modules relative to the config install
+-# directory.
+-file (RELATIVE_PATH glog_REL_CMake_MODULES
+-  ${_PREFIX}/${_glog_CMake_INSTALLDIR}
+-  ${_PREFIX}/${_glog_CMake_DATADIR}/glog-modules.cmake)
+-
+-get_filename_component (glog_REL_CMake_DATADIR ${glog_REL_CMake_MODULES}
+-  DIRECTORY)
+-
+-set (glog_FULL_CMake_DATADIR
+-  ${CMAKE_CURRENT_BINARY_DIR}/${_glog_CMake_DATADIR})
++set (glog_FULL_CMake_DATADIR /usr/share/glog/cmake)
+ 
+ configure_file (glog-modules.cmake.in
+   ${CMAKE_CURRENT_BINARY_DIR}/glog-modules.cmake @ONLY)
+ 
+ install (CODE
+ "
+-set (glog_FULL_CMake_DATADIR \"\\\${CMAKE_CURRENT_LIST_DIR}/${glog_REL_CMake_DATADIR}\")
++set (glog_FULL_CMake_DATADIR \"/usr/share/glog/cmake\")
+ set (glog_DATADIR_DESTINATION ${_glog_CMake_INSTALLDIR})
+ 
+ if (NOT IS_ABSOLUTE ${_glog_CMake_INSTALLDIR})

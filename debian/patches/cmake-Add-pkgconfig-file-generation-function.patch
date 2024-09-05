@@ -15,7 +15,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 808330e..6f2abd1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -682,3 +682,14 @@ install (FILES
+@@ -1078,3 +1078,14 @@ install (FILES
  
  install (EXPORT glog-targets NAMESPACE glog:: DESTINATION
    ${_glog_CMake_INSTALLDIR})

@@ -1,13 +1,13 @@
 Description: fix FTBFS on x32
 Author: Guillaume Morin <guillaume@morinfr.org>
 Forwarded: no
-Last-Update: 2019-08-05
+Last-Update: 2022-03-06
 
 ---
 
 --- google-glog-0.3.4.orig/src/symbolize_unittest.cc
 +++ google-glog-0.3.4/src/symbolize_unittest.cc
-@@ -313,8 +313,12 @@ extern "C" {
+@@ -321,8 +321,12 @@ extern "C" {
  inline void* always_inline inline_func() {
    void *pc = NULL;
  #ifdef TEST_X86_32_AND_64
@@ -20,7 +20,7 @@ Last-Update: 2019-08-05
    return pc;
  }
  
-@@ -322,8 +326,12 @@ void* ATTRIBUTE_NOINLINE non_inline_func
+@@ -330,8 +334,12 @@ void* ATTRIBUTE_NOINLINE non_inline_func
  void* ATTRIBUTE_NOINLINE non_inline_func() {
    void *pc = NULL;
  #ifdef TEST_X86_32_AND_64

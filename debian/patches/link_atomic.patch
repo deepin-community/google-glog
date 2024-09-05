@@ -1,0 +1,21 @@
+Description: link with atomic if it's found
+ Some architectures need to link explicitly with atomic.
+Author: Laszlo Boszormenyi (GCS) <gcs@debian.org>
+Forwarded: no
+Last-Update: 2022-03-06
+
+---
+
+--- google-glog-0.6.0~rc1.orig/CMakeLists.txt
++++ google-glog-0.6.0~rc1/CMakeLists.txt
+@@ -746,6 +746,10 @@ if (BUILD_TESTING)
+     list (APPEND _GLOG_TEST_LIBS GTest::gmock)
+   endif (HAVE_LIB_GMOCK)
+ 
++  if (HAVE_CXX11_ATOMIC)
++    list (APPEND _GLOG_TEST_LIBS atomic)
++  endif (HAVE_CXX11_ATOMIC)
++
+   add_executable (logging_unittest
+     src/logging_unittest.cc
+   )
