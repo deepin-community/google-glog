@@ -4,7 +4,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-export DOCDIR=$(CURDIR)/debian/libgoogle-glog-doc/
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 BUILDDIR = obj-$(DEB_HOST_MULTIARCH)
 
@@ -51,10 +50,9 @@ override_dh_auto_install-indep:
 
 override_dh_install-arch:
 	dh_install -a -O--buildsystem=cmake
-	# only for real 0.5.0
-#ifneq (,$(findstring $(DEB_HOST_ARCH),amd64 i386))
-#	dh_install -plibgoogle-glog-dev debian/tmp/usr/share/glog usr/share/
-#endif
+ifneq (,$(findstring $(DEB_HOST_ARCH),amd64 i386 ia64))
+	dh_install -plibgoogle-glog-dev debian/tmp/usr/share/glog usr/share/
+endif
 
 override_dh_install-indep:
 	# not needed
@@ -64,11 +62,6 @@ override_dh_auto_test-arch:
 
 override_dh_auto_test-indep:
 	# not needed
-
-override_dh_installdocs-indep:
-	dh_installdocs
-	sed -i 's|http.*/favicon.ico||' \
-		$(DOCDIR)/usr/share/doc/libgoogle-glog-dev/glog.html
 
 override_dh_compress:
 	dh_compress -X.rst
@@ -84,4 +77,4 @@ get-orig-source:
 	override_dh_auto_install-arch override_dh_auto_install-indep \
 	override_dh_install-arch override_dh_install-indep \
 	override_dh_auto_test-arch override_dh_auto_test-indep \
-	override_dh_installdocs-indep override_dh_compress
+	override_dh_compress

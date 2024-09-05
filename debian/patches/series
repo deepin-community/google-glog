@@ -3,3 +3,5 @@
 20130313_fix_test_on_ports.diff
 x32_build_fix.patch
 cmake-Add-pkgconfig-file-generation-function.patch
+link_atomic.patch
+absolute-path-to-cmake-modules.patch
